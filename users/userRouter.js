@@ -16,9 +16,17 @@ router.post("/", validatePost, (req, res) => {
     });
 });
 
-// router.post('/:id/posts', (req, res) => {
-
-// });
+router.post("/:id/posts", [validateUserId, validatePost], (req, res) => {
+  Users.insert(req.body)
+    .then(post => {
+      res.status(201).json(post);
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: error.message
+      });
+    });
+});
 
 // router.get('/', (req, res) => {
 
