@@ -73,9 +73,19 @@ router.delete("/:id", validateUserId, (req, res) => {
     });
 });
 
-// router.put('/:id', (req, res) => {
-
-// });
+router.put("/:id", [validateUserId, validateUser] , (req, res) => {
+  Users.update(req.user.id, req.body)
+    .then((user) => {
+      res.status(200).json({
+        message: "Edited"
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: error.message
+      });
+    });
+});
 
 //custom middleware
 
