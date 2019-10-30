@@ -1,12 +1,20 @@
-const express = "express";
+const express = require("express");
 
 const Users = require("./userDb");
 
 const router = express.Router();
 
-// router.post('/', (req, res) => {
-
-// });
+router.post("/", validatePost, (req, res) => {
+  Users.insert(req.body)
+    .then(post => {
+      res.status(201).json(post);
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: error.message
+      });
+    });
+});
 
 // router.post('/:id/posts', (req, res) => {
 
@@ -47,15 +55,15 @@ function validateUserId(req, res, next) {
   });
 }
 function validateUser(req, res, next) {
-    if (!Object.keys(req.body).length) {
-      res.status(400).json({ message: "missing user data!" });
-    } else if (!req.body.name) {
-      res.status(400).json({ message: 'missing required "name" field!' });
-    } else {
-      next();
-    }
+  if (!Object.keys(req.body).length) {
+    res.status(400).json({ message: "missing user data!" });
+  } else if (!req.body.name) {
+    res.status(400).json({ message: 'missing required "name" field!' });
+  } else {
+    next();
   }
-  
+}
+
 function validatePost(req, res, next) {
   if (!Object.keys(req.body).length) {
     res.status(400).json({ message: "missing user data!" });
