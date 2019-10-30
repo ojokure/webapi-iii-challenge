@@ -1,7 +1,7 @@
 const express = require("express");
 
 const Users = require("./userDb");
-const Posts = require("../posts/postDb")
+const Posts = require("../posts/postDb");
 
 const router = express.Router();
 
@@ -19,8 +19,8 @@ router.post("/", validatePost, (req, res) => {
 
 router.post("/:id/posts", [validateUserId, validatePost], (req, res) => {
   const postData = { ...req.body, user_id: req.params.id };
-  
-    Posts.insert(postData)
+
+  Posts.insert(postData)
     .then(post => {
       res.status(201).json(post);
     })
@@ -31,13 +31,21 @@ router.post("/:id/posts", [validateUserId, validatePost], (req, res) => {
     });
 });
 
-// router.get('/', (req, res) => {
+router.get("/", (req, res) => {
+  Users.get()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: error.message
+      });
+    });
+});
 
-// });
-
-// router.get('/:id', (req, res) => {
-
-// });
+router.get("/:id", validateUserId, (req, res) => {
+  res.status(200).json(req.user);
+});
 
 // router.get('/:id/posts', (req, res) => {
 
